@@ -3,178 +3,940 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ash's Web Experiments</title>
+  <title>Ash's Web Experiments | Digital Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #f0f0f0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    :root {
+      --primary: #ff6f61;
+      --secondary: #7fffd4;
+      --bg-dark: #0a0a0a;
+      --bg-card: rgba(30, 30, 30, 0.8);
+      --text-primary: #f0f0f0;
+      --text-secondary: #bbb;
+      --accent: #ff4757;
+      --gradient-1: #667eea;
+      --gradient-2: #764ba2;
+      --gradient-3: #f093fb;
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #f5f5f5;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: linear-gradient(45deg, #0a0a0a, #1a0f1f, #0f0a1a);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Particles */
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.4;
+      }
+      90% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.8);
+      z-index: 1000;
+      padding: 15px 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5em;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    #searchInput {
+      padding: 8px 35px 8px 15px;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      font-size: 0.9em;
+      width: 200px;
+      transition: all 0.3s ease;
+    }
+
+    #searchInput:focus {
+      outline: none;
+      width: 250px;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(180deg);
+    }
+
+    /* Header */
     header {
       text-align: center;
-      padding: 60px 20px 30px;
+      padding: 120px 20px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
     }
 
     header h1 {
-      font-size: 3em;
-      margin-bottom: 10px;
-      color: #ff6f61;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5em, 8vw, 4.5em);
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--gradient-1));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleFloat 3s ease-in-out infinite;
     }
 
-    header p {
-      font-size: 1.2em;
-      color: #bbb;
+    @keyframes titleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
+    .tagline {
+      font-size: 1.3em;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9em;
+    }
+
+    /* Filter Buttons */
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      padding: 0 20px;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border: 2px solid transparent;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      font-size: 0.9em;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
       padding: 40px 20px;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
+    /* Cards */
     .card {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 25px 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardFadeIn 0.6s ease forwards;
+    }
+
+    .card:nth-child(n) {
+      animation-delay: calc(n * 0.1s);
+    }
+
+    @keyframes cardFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 0 20px rgba(255, 111, 97, 0.5);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(255, 111, 97, 0.3);
+      border-color: rgba(255, 111, 97, 0.3);
     }
 
-    .card h2 {
-      font-size: 1.3em;
-      color: #7fffd4;
-      margin-bottom: 10px;
+    .card:hover::before {
+      opacity: 1;
     }
 
-    .card p {
-      font-size: 0.95em;
-      color: #ccc;
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 15px;
     }
 
+    .card h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4em;
+      color: var(--secondary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .emoji {
+      font-size: 1.2em;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .badge {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.7em;
+      font-weight: 600;
+      text-transform: uppercase;
+      animation: pulse 2s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .card a {
-      display: inline-block;
-      color: #ff6f61;
-      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-weight: 600;
       text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
     }
 
-    .card a:hover {
-      text-decoration: underline;
+    .card a::after {
+      content: '→';
+      transition: transform 0.3s ease;
     }
 
+    .card a:hover::after {
+      transform: translateX(5px);
+    }
+
+    .category-tag {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
     footer {
       text-align: center;
-      padding: 40px 20px;
-      font-size: 0.9em;
-      color: #666;
+      padding: 60px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      margin-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(255, 111, 97, 0.4);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .fab:hover {
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    /* Loading Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--primary), var(--secondary));
+      border-radius: 5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 15px;
+      }
+
+      #searchInput {
+        width: 150px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+
+      .stats {
+        gap: 20px;
+      }
+
+      header h1 {
+        font-size: 2.5em;
+      }
+    }
+
+    /* Easter Egg */
+    .konami-active {
+      animation: rainbow 2s linear infinite;
+    }
+
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  <div id="particles"></div>
 
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo">AK</div>
+      <div class="nav-links">
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Search projects...">
+          <span class="search-icon">🔍</span>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
   <header>
-    <h1>🛠️ Web Experiments</h1>
-    <p>Because the internet deserves worse ideas.</p>
+    <div class="header-content">
+      <h1>🛠️ Web Experiments</h1>
+      <p class="tagline">Because the internet deserves worse ideas.</p>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number" data-count="13">0</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="100">0</span>
+          <span class="stat-label">% Chaos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="∞">0</span>
+          <span class="stat-label">Bad Ideas</span>
+        </div>
+      </div>
+    </div>
   </header>
 
+  <!-- Filter Buttons -->
+  <div class="filter-container">
+    <button class="filter-btn active" data-filter="all">All Projects</button>
+    <button class="filter-btn" data-filter="game">Games</button>
+    <button class="filter-btn" data-filter="generator">Generators</button>
+    <button class="filter-btn" data-filter="simulation">Simulations</button>
+  </div>
+
+  <!-- Projects Grid -->
   <div class="grid">
 
-    <div class="card">
-      <h2>🎩 Cartel Name Generator</h2>
+    <div class="card" data-category="generator">
+      <div class="card-header">
+        <h2><span class="emoji">🎩</span> Cartel Name Generator</h2>
+        <span class="badge">HOT</span>
+      </div>
       <p>Generates ridiculous verb + noun cartel names like "Snort Pickles" or "Whack Muffins."</p>
-      <a href="https://cartelgen.pages.dev" target="_blank">Try it</a>
+      <div class="card-footer">
+        <a href="https://cartelgen.pages.dev" target="_blank">Try it</a>
+        <span class="category-tag">Generator</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>💀 Long Insult Generator</h2>
+    <div class="card" data-category="generator">
+      <div class="card-header">
+        <h2><span class="emoji">💀</span> Long Insult Generator</h2>
+      </div>
       <p>Roasts with Shakespearean depth and TikTok-level drama. Made for fun, not real beef (probably).</p>
-      <a href="https://longinsultygen.pages.dev" target="_blank">Roast Me</a>
+      <div class="card-footer">
+        <a href="https://longinsultygen.pages.dev" target="_blank">Roast Me</a>
+        <span class="category-tag">Generator</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>📡 Clean Insult Generator</h2>
+    <div class="card" data-category="generator">
+      <div class="card-header">
+        <h2><span class="emoji">📡</span> Clean Insult Generator</h2>
+      </div>
       <p>Creates "clean" insults.</p>
-      <a href="https://insultygen.pages.dev" target="_blank">Kill them Kindly</a>
+      <div class="card-footer">
+        <a href="https://insultygen.pages.dev" target="_blank">Kill them Kindly</a>
+        <span class="category-tag">Generator</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>📡 Bizarre Conspiracy Mixer</h2>
+    <div class="card" data-category="generator">
+      <div class="card-header">
+        <h2><span class="emoji">📡</span> Bizarre Conspiracy Mixer</h2>
+        <span class="badge">NEW</span>
+      </div>
       <p>Creates new world-ending conspiracies using buzzwords, reptiles, and expired cereal box codes.</p>
-      <a href="https://conspmix.pages.dev/" target="_blank">Uncover the Truth</a>
+      <div class="card-footer">
+        <a href="https://conspmix.pages.dev/" target="_blank">Uncover the Truth</a>
+        <span class="category-tag">Generator</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>💥 Minesweeper</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">💥</span> Minesweeper</h2>
+      </div>
       <p>A fun minesweeper clone!</p>
-      <a href="https://sweeper-641.pages.dev" target="_blank">Find the Mine</a>
+      <div class="card-footer">
+        <a href="https://sweeper-641.pages.dev" target="_blank">Find the Mine</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🔠 TORDLE</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">🔠</span> TORDLE</h2>
+      </div>
       <p>When you dont want to stop playing wordle. Tordle, 5 letters, 6 tries.</p>
-      <a href="https://tordle-el5.pages.dev" target="_blank">Guess the word</a>
+      <div class="card-footer">
+        <a href="https://tordle-el5.pages.dev" target="_blank">Guess the word</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>👆 Emoji Clicker</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">👆</span> Emoji Clicker</h2>
+        <span class="badge">UPDATED</span>
+      </div>
       <p>A clicker game that was made with so much effort, it really shows. Updated 6/28</p>
-      <a href="https://emojiclicker.pages.dev" target="_blank">Click, Click, Click</a>
+      <div class="card-footer">
+        <a href="https://emojiclicker.pages.dev" target="_blank">Click, Click, Click</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>👑 Emoji Defense</h2>
-      <p>Tower defense, but emojis.Updated 6/28</p>
-      <a href="https://emojidefense.pages.dev" target="_blank">Defend, Upgrade, ATTACK!</a>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">👑</span> Emoji Defense</h2>
+        <span class="badge">UPDATED</span>
+      </div>
+      <p>Tower defense, but emojis. Updated 6/28</p>
+      <div class="card-footer">
+        <a href="https://emojidefense.pages.dev" target="_blank">Defend, Upgrade, ATTACK!</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>⚔️ Emoji Roguelike</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">⚔️</span> Emoji Roguelike</h2>
+        <span class="badge">UPDATED</span>
+      </div>
       <p>Procedurally Generated Roguelike Dungeon. Updated 6/30</p>
-      <a href="https://roguelike-9nw.pages.dev" target="_blank">Explore, Loot, Sell, Repeat.</a>
+      <div class="card-footer">
+        <a href="https://roguelike-9nw.pages.dev" target="_blank">Explore, Loot, Sell, Repeat.</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🎲 The Royal Flush Casino</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">🎲</span> The Royal Flush Casino</h2>
+        <span class="badge">V2</span>
+      </div>
       <p>V2 of the solo poker game. Updated 6/29</p>
-      <a href="https://casinogame.pages.dev" target="_blank">50/50 every time!</a>
+      <div class="card-footer">
+        <a href="https://casinogame.pages.dev" target="_blank">50/50 every time!</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🔥 Falling Sand Game</h2>
+    <div class="card" data-category="simulation">
+      <div class="card-header">
+        <h2><span class="emoji">🔥</span> Falling Sand Game</h2>
+        <span class="badge">RETRO</span>
+      </div>
       <p>The classic falling sand game redesigned for 2015... What? Updated 6/30</p>
-      <a href="https://fallingsand.pages.dev" target="_blank">Does this burn?</a>
+      <div class="card-footer">
+        <a href="https://fallingsand.pages.dev" target="_blank">Does this burn?</a>
+        <span class="category-tag">Simulation</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🐦 FloppyBird</h2>
+    <div class="card" data-category="game">
+      <div class="card-header">
+        <h2><span class="emoji">🐦</span> FloppyBird</h2>
+      </div>
       <p>That one bird game that took over the world for like 2 weeks then disappeared.</p>
-      <a href="https://floppybird-7qu.pages.dev/" target="_blank">Remove from playstore</a>
+      <div class="card-footer">
+        <a href="https://floppybird-7qu.pages.dev/" target="_blank">Remove from playstore</a>
+        <span class="category-tag">Game</span>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>🌍 Solarsim</h2>
+    <div class="card" data-category="simulation">
+      <div class="card-header">
+        <h2><span class="emoji">🌍</span> Solarsim</h2>
+      </div>
       <p>It is all so delicate. Disrupt it.</p>
-      <a href="https://solarsim.pages.dev/" target="_blank">Cause destruction</a>
+      <div class="card-footer">
+        <a href="https://solarsim.pages.dev/" target="_blank">Cause destruction</a>
+        <span class="category-tag">Simulation</span>
+      </div>
     </div>
-
-
 
   </div>
 
+  <!-- Footer -->
   <footer>
-    Ideas thought of by me, made by AI, and tested on caffeine and chaos.<br>© 2025 Asche
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="https://github.com/AscheKumo" target="_blank" class="social-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-link">🐦</a>
+        <a href="#" class="social-link">💼</a>
+      </div>
+      <p>Ideas thought of by me, made by AI, and tested on caffeine and chaos.</p>
+      <p>© <span id="year">2025</span> Asche | Built with ☕ and questionable judgment</p>
+    </div>
   </footer>
 
+  <!-- Floating Action Button -->
+  <div class="fab" onclick="scrollToTop()">↑</div>
+
+  <script>
+    // Generate particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 10 + 5 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Theme toggle
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      const themeToggle = document.querySelector('.theme-toggle');
+      themeToggle.textContent = newTheme === 'light' ? '☀️' : '🌙';
+    }
+
+    // Load saved theme
+    function loadTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.body.setAttribute('data-theme', savedTheme);
+      const themeToggle = document.querySelector('.theme-toggle');
+      themeToggle.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+    }
+
+    // Animated counter
+    function animateCounter(element, target) {
+      let current = 0;
+      const increment = target / 100;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.textContent = target === Infinity ? '∞' : Math.floor(target);
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(current);
+        }
+      }, 20);
+    }
+
+    // Search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('searchInput');
+      const cards = document.querySelectorAll('.card');
+
+      searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        cards.forEach(card => {
+          const title = card.querySelector('h2').textContent.toLowerCase();
+          const description = card.querySelector('p').textContent.toLowerCase();
+          
+          if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+            card.style.animation = 'cardFadeIn 0.3s ease forwards';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    // Filter functionality
+    function setupFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+          
+          // Update active state
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Filter cards
+          cards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'block';
+              card.style.animation = 'cardFadeIn 0.3s ease forwards';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // Scroll to top
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Intersection Observer for animations
+    function setupIntersectionObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = 'cardFadeIn 0.6s ease forwards';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.card').forEach(card => {
+        observer.observe(card);
+      });
+    }
+
+    // Konami Code Easter Egg
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          document.body.classList.add('konami-active');
+          setTimeout(() => {
+            alert('🎮 Achievement Unlocked: Konami Master! 🎮');
+            document.body.classList.remove('konami-active');
+          }, 3000);
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      loadTheme();
+      setupSearch();
+      setupFilters();
+      setupIntersectionObserver();
+      
+      // Animate counters
+      const counters = document.querySelectorAll('.stat-number');
+      counters.forEach(counter => {
+        const target = counter.getAttribute('data-count');
+        if (target === '∞') {
+          animateCounter(counter, Infinity);
+        } else {
+          animateCounter(counter, parseInt(target));
+        }
+      });
+      
+      // Update year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+    // Navbar hide/show on scroll
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        nav.style.transform = 'translateY(-100%)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+      
+      lastScrollTop = scrollTop;
+    });
+  </script>
 </body>
 </html>
